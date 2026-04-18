@@ -1,0 +1,12 @@
+[project]
+name = "python-fastapi"
+version = "0.1.0"
+description = "Add your description here"
+requires-python = ">=3.13"
+dependencies = [
+    "fastapi",
+    "uvicorn>=0.44.0",
+]
+
+[tool.uv]
+native-tls = true
