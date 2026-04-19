@@ -12,7 +12,7 @@ products = [{"pid":"142ABC","name":"Product A","category":"Electronics","descrip
 
 
 @app.get("/product_list")
-def product_list(limit: int = None):
+def product_list(limit: int):
     try:
         return products[:limit]
     except Exception as e:
