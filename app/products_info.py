@@ -30,8 +30,11 @@ def get_product(pid: str):
 @app.get("/product/category/{category_name}")
 def get_product_by_category(category_name: str, limit: int = None):
     category_expected = category_name.strip().casefold()
-    return [
+    response_data= [
         product
         for product in products
         if product["category"].casefold() == category_expected
     ][:limit]
+    if response_data:
+        return response_data
+    raise HTTPException(status_code=404, detail="category is not exist")
