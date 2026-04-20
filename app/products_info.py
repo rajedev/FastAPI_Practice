@@ -17,7 +17,6 @@ product_json = '[{"pid": "142ABC", "name": "Product A", "category": "Electronics
 
 adapter = TypeAdapter(List[Products])
 products: list[Products] = adapter.validate_json(product_json)
-print(products)
 
 
 @app.get(
@@ -71,3 +70,19 @@ def get_product_by_category(
     if not response_data:
         raise HTTPException(status_code=404, detail="category does not exist")
     return response_data
+
+
+@app.post(
+    "/add_product",
+    response_model=Products,
+    responses={
+        409: {"model": ErrorResponse, "description": "Product id already exists"},
+        422: {"description": "Request body failed validation"},
+    },
+    summary="Create a new product",
+)
+def create_product(prod: Products) -> Products:
+    if any(item.pid == prod.pid for item in products):
+        raise HTTPException(status_code=409, detail="Product already exists")
+    products.append(prod)
+    return prod

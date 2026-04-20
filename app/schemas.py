@@ -4,14 +4,15 @@ Date: 19/04/26
 Description: Pydantic model for Product Info API methods for practicing fastapi
 """
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class Products(BaseModel):
     """Product info API methods for practicing fastapi"""
-    pid: str
+    pid: str = Field(min_length=1, description="Product ID")
     name: str
     category: str
+    description: str
     price: float
 
 
