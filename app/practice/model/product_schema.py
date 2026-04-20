@@ -1,13 +1,13 @@
 """
 Author: Rajendhiran Easu
 Date: 19/04/26
-Description: Pydantic model for Product Info API methods for practicing fastapi
+Description: Pydantic models for the Product API
 """
 
 from pydantic import BaseModel, Field
 
 
-class Products(BaseModel):
+class Product(BaseModel):
     """Product info API methods for practicing fastapi"""
     pid: str = Field(min_length=1, description="Product ID")
     name: str
