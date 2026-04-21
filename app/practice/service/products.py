@@ -61,6 +61,7 @@ def update_product(pid: str, patch: ProductPatch) -> Product:
 def remove_product(pid: str) -> None:
     for index, item in enumerate(_products):
         if item.pid == pid:
+            #return _products.pop(index) # If we wanna return Product ; change return type & router layer code too
             del _products[index]
             return
     raise ProductException(pid, f"Product with pid {pid} does not exist")
