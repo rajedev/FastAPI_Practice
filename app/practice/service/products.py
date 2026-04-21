@@ -47,6 +47,7 @@ def create_product(product: Product) -> Product:
     _products.append(product)
     return product
 
+
 def update_product(pid: str, patch: ProductPatch) -> Product:
     data = patch.model_dump(exclude_unset=True)
     for i, item in enumerate(_products):
@@ -54,4 +55,20 @@ def update_product(pid: str, patch: ProductPatch) -> Product:
             updated = item.model_copy(update=data)
             _products[i] = updated
             return updated
+    raise ProductException(pid, f"Product with pid {pid} does not exist")
+
+
+def remove_product(pid: str) -> None:
+    for index, item in enumerate(_products):
+        if item.pid == pid:
+            del _products[index]
+            return
+    raise ProductException(pid, f"Product with pid {pid} does not exist")
+
+
+def change_product(pid: str, product: Product) -> Product:
+    for index, item in enumerate(_products):
+        if item.pid == pid:
+            _products[index] = product
+            return product
     raise ProductException(pid, f"Product with pid {pid} does not exist")

@@ -11,5 +11,7 @@ from app.practice.service.products import (
     list_products,
     provide_product,
     provide_product_by_category,
-    update_product
+    update_product,
+    remove_product,
+    change_product
 )

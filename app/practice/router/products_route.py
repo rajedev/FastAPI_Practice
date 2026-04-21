@@ -13,7 +13,7 @@ product_router = APIRouter(prefix="/products", tags=["products"])
 
 
 @product_router.get(
-    "", # Explicit path is not required, it works with prefix
+    "",  # Explicit path is not required, it works with prefix
     response_model=list[Product],
     responses={
         422: {"description": "Invalid query parameters"},
@@ -79,7 +79,7 @@ def create_product(
 
 
 @product_router.patch(
-    "/{pid}",
+    path="/{pid}",
     response_model=Product,
     responses={
         404: {"model": ErrorResponse, "description": "Product not found"},
@@ -92,3 +92,35 @@ def patch_product(pid: str, patch: ProductPatch) -> Product:
         return product_svc.update_product(pid, patch)
     except product_svc.ProductException as e:
         raise HTTPException(status_code=404, detail=str(e)) from None
+
+
+@product_router.put(
+    path="/{pid}",
+    response_model=Product,
+    responses={
+        404: {"model": ErrorResponse, "description": "product not found"},
+        422: {"description": "Invalid params or body"}
+    },
+    summary="Replace the product"
+)
+def replace_product(pid: str, product: Product) -> Product:
+    try:
+        return product_svc.change_product(pid, product)
+    except product_svc.ProductException as e:
+        raise HTTPException(status_code=404, detail=str(e)) from None
+
+
+@product_router.delete(
+    path="/{pid}",
+    status_code=204,
+    responses={
+        404: {"model": ErrorResponse, "description": "product not found"},
+        422: {"description": "Invalid params or body"}
+    },
+    summary="Remove the product"
+)
+def remove_product(pid: str) -> None:
+    try:
+        return product_svc.remove_product(pid)
+    except product_svc.ProductException as e:
+        raise HTTPException(status_code=404, detail=str(e))
