@@ -7,7 +7,7 @@ Description: Product HTTP API (versioned under /api/v1 in main).
 from fastapi import APIRouter, HTTPException, Query
 
 import app.practice.service as product_svc
-from app.practice.model.product_schema import ErrorResponse, Product
+from app.practice.model.product_schema import ErrorResponse, Product, ProductPatch
 
 product_router = APIRouter(prefix="/products", tags=["products"])
 
@@ -74,5 +74,21 @@ def create_product(
 ) -> Product:
     try:
         return product_svc.create_product(item)
-    except product_svc.ProductAlreadyExistsError:
+    except product_svc.ProductException:
         raise HTTPException(status_code=409, detail="Product already exists") from None
+
+
+@product_router.patch(
+    "/{pid}",
+    response_model=Product,
+    responses={
+        404: {"model": ErrorResponse, "description": "Product not found"},
+        422: {"description": "Invalid body"},
+    },
+    summary="Partially update a product",
+)
+def patch_product(pid: str, patch: ProductPatch) -> Product:
+    try:
+        return product_svc.update_product(pid, patch)
+    except product_svc.ProductException as e:
+        raise HTTPException(status_code=404, detail=str(e)) from None

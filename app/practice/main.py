@@ -14,6 +14,7 @@ app = FastAPI(
     title="Practice API",
     version="1.0.0",
     description="Versioned HTTP API. All route modules are mounted under `/api/v1`.",
+    swagger_ui_parameters={"tryItOutEnabled":True}
 )
 
 app.include_router(user_router, prefix=API_V1_PREFIX)

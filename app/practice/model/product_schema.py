@@ -16,6 +16,15 @@ class Product(BaseModel):
     price: float
 
 
+class ProductPatch(BaseModel):
+    """Partial update: only fields present in the JSON body are applied."""
+
+    name: str | None = None
+    category: str | None = None
+    description: str | None = None
+    price: float | None = None
+
+
 class ErrorResponse(BaseModel):
     """Default FastAPI / Starlette HTTPException JSON shape (string detail)."""
     detail: str
